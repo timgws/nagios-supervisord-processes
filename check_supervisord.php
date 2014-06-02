@@ -97,9 +97,11 @@ class SuperVisorNagios
     {
         $superVisorProcessList = $this->xmlRPCRequest(self::SUPERVISOR_RPC_REQUEST_LISTPROCESS);
         $deadProcesses = array();
+        $seenProcess = false;
 
         foreach ($superVisorProcessList as $process) {
             if (isset($process['name']) && preg_match('/' . $this->grepPattern . '/',$process['name'])) {
+                $seenProcess = true;
 
                 if($process['state'] != self::SUPERVISOR_STATE_RUNNING) {
                     $deadProcesses[$process['name']] = $process['spawnerr'];
@@ -110,6 +112,10 @@ class SuperVisorNagios
         if($deadProcesses) {
             $deadProcessList = implode(',', array_keys($deadProcesses));
             $this->writeError("Process $deadProcessList are not running", self::NAGIOS_STATE_CRITICAL);
+        }
+
+        if (!$seenProcess) {
+            $this->writeError("Could not find a process...");
         }
 
         $this->exitOk();
