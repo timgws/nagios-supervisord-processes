@@ -38,4 +38,7 @@ updated a little bit to clean up documentation & code.
             register                        0
     }
 
+I [wrote about the nagios plugin over at my blog][2].
+
   [1]: http://supervisord.org/api.html
+  [2]: http://timg.ws/2014/06/03/nagios-plugin-for-checking-the-status-of-supervisord-processes/
